@@ -16,20 +16,26 @@ def model_config(input_shape: tuple) -> Sequential:
     zero_init = keras.initializers.RandomNormal(mean=0.001, stddev=0.00001, seed=123)
     model = Sequential()
     # input_shape=x_train.shape[1:],
+    model.add(Dense(units=64,
+                    kernel_initializer=initializer,
+                    bias_initializer=zero_init,
+                    kernel_regularizer=tf.keras.regularizers.L1L2(l1=0.001, l2=0.1),
+                    activation='softmax'))
+    model.add(Dropout(0.25))
+    model.add(Dense(units=32,
+                    kernel_initializer=initializer,
+                    bias_initializer=zero_init,
+                    activation='relu'))
+    model.add(Dropout(0.25))
     model.add(Dense(units=16,
                     kernel_initializer=initializer,
                     bias_initializer=zero_init,
+                    kernel_regularizer=tf.keras.regularizers.L1L2(l1=0.001, l2=0.1),
                     activation='softmax'))
-    model.add(Dropout(0.25))
-    model.add(Dense(units=8,
-                    kernel_initializer=initializer,
-                    kernel_regularizer=tf.keras.regularizers.L2(l2=0.001),
-                    bias_initializer=zero_init,
-                    activation='tanh'))
-    model.add(Dropout(0.25))
     model.add(Dense(units=2,
-                    kernel_initializer=initializer,
+                    kernel_initializer=bias_init,
                     bias_initializer=bias_init,
+                    # activation='relu',
                     activation='tanh'))
     return model
 
@@ -39,9 +45,9 @@ def train(model: Sequential, x_train_: List[List[float]], y_train_: List[List[fl
     model.compile(optimizer=optimizer, loss=['mse'],
                   metrics=['mse', 'mae'])
     early_stop = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=2)
-    history = model.fit(x_train_, y_train_, validation_split=0.2, batch_size=4, epochs=1000,
+    history = model.fit(x_train_, y_train_, validation_split=0.2, batch_size=4, epochs=3000,
                         callbacks=[early_stop, ])
-    model.save(os.path.join(os.getcwd(), "example_model_1"))
+    model.save(os.path.join(os.getcwd(), "models/example_model_3"))
     return model
 
 
@@ -50,7 +56,7 @@ if __name__ == "__main__":
     file_p = r'example1_data.txt'
     df = pd.read_csv(file_p, sep='\t')
     df['a'] = 0.24
-    df['b'] = -0.0632
+    df['b'] = -0.5
     df['x'] = df['x']/50
     df['y'] = df['y']/1.27124915
     print(df.head(10))
@@ -66,7 +72,7 @@ if __name__ == "__main__":
                             x_train_=x_train,
                             y_train_=y_train)
 
-    example_model_1 = keras.models.load_model('example_model_1')
+    example_model_1 = keras.models.load_model('models/example_model_3')
 
     print(list(example_model_1.predict(x_test)))
 
