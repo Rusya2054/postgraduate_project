@@ -59,10 +59,11 @@ if __name__ == "__main__":
     df['b'] = -0.5
     df['x'] = df['x']/50
     df['y'] = df['y']/1.27124915
+    df['y+δ'] = df['y+δ']/df['y+δ'].max()
     print(df.head(10))
 
-    # X = df[['x', 'y+δ']].copy(deep=True)
-    X = df[['x', 'y']].copy(deep=True)
+    X = df[['x', 'y+δ']].copy(deep=True)
+    # X = df[['x', 'y']].copy(deep=True)
     Y = df[['a', 'b']].copy(deep=True)
 
     x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size=0.001, random_state=123)
