@@ -68,10 +68,10 @@ if __name__ == "__main__":
 
     x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size=0.001, random_state=123)
 
-    example_model_1 = model_config(X.shape)
-    example_model_1 = train(model=example_model_1,
-                            x_train_=x_train,
-                            y_train_=y_train)
+    # example_model_1 = model_config(X.shape)
+    # example_model_1 = train(model=example_model_1,
+    #                         x_train_=x_train,
+    #                         y_train_=y_train)
 
     example_model_1 = keras.models.load_model('models/example_model_3')
 
