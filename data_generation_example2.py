@@ -24,7 +24,7 @@ if __name__ == "__main__":
     # сортируем первые два элемента по возрастанию
     data = [[*sorted(i[:3]), *i[3:]] for i in data]
     x1, x2, a, b = zip(*data)
-    y1, y2 = zip(*[[round(i[3]*math.exp(-i[0]*i[3]), 2), round(i[3]*math.exp(-i[1]*i[3]), 2)] for i in data])
+    y1, y2 = zip(*[[i[2]*math.exp(-i[0]*i[3]), i[2]*math.exp(-i[1]*i[3])] for i in data])
 
     pd.DataFrame({"x1": x1,
                   "x2": x2,
