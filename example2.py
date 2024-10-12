@@ -9,6 +9,7 @@ from keras.models import Sequential
 from keras.layers import Dense, Dropout
 from sklearn.model_selection import train_test_split
 import tensorflow as tf
+from model_saving import *
 
 
 def model_config(input_shape: tuple) -> Sequential:
@@ -19,25 +20,20 @@ def model_config(input_shape: tuple) -> Sequential:
     zero_init = keras.initializers.RandomNormal(mean=0.001, stddev=0.00001, seed=123)
     model = Sequential()
     # input_shape=x_train.shape[1:],
-    model.add(Dense(units=512,
-                    kernel_initializer=initializer,
-                    bias_initializer=zero_init,
-                    kernel_regularizer=tf.keras.regularizers.L1L2(l1=0.001, l2=0.001),
-                    activation='sigmoid'))
-    model.add(Dense(units=256,
-                    kernel_initializer=initializer,
-                    bias_initializer=zero_init,
-                    # kernel_regularizer=tf.keras.regularizers.L1L2(l1=0.001, l2=0.001),
-                    activation='sigmoid'))
-    model.add(Dense(units=128,
-                    kernel_initializer=initializer,
-                    bias_initializer=zero_init,
-                    activation='sigmoid'))
     model.add(Dense(units=64,
                     kernel_initializer=initializer,
                     bias_initializer=zero_init,
-                    # kernel_regularizer=tf.keras.regularizers.L1L2(l1=0.001, l2=0.1),
-                    activation='sigmoid'))
+                    # kernel_regularizer=tf.keras.regularizers.L1L2(l1=0.001, l2=0.001),
+                    activation='tanh'))
+    model.add(Dense(units=32,
+                    kernel_initializer=initializer,
+                    bias_initializer=zero_init,
+                    activation='tanh'))
+    model.add(Dense(units=16,
+                    kernel_initializer=initializer,
+                    bias_initializer=zero_init,
+                    kernel_regularizer=tf.keras.regularizers.L1L2(l1=0.0001, l2=0.001),
+                    activation='tanh'))
     model.add(Dense(units=2,
                     kernel_initializer=initializer,
                     bias_initializer=zero_init,
@@ -52,8 +48,8 @@ def train_model(model: Sequential, x_train_: List[List[float]], y_train_: List[L
                   metrics=['mse', 'mae'])
     early_stop = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=2)
     history = model.fit(x_train_, y_train_, validation_split=0.2, batch_size=4, epochs=200,
-                        # callbacks=[early_stop, ])
-                        )
+                        callbacks=[early_stop, ])
+                        # )
 
     model.save(os.path.join(os.getcwd(), "models/example_2_model_1"))
     return model
@@ -77,6 +73,7 @@ def mean_squared_error(list1, list2):
     mse = sum((a - b) ** 2 for a, b in zip(list1, list2)) / len(list1)
     return mse
 
+
 if __name__ == "__main__":
     """4 признака:x1, x2, y1, y2 -> a, b; без шумов; модель: только Dense;"""
     file_p = r'example2_data.txt'
@@ -95,7 +92,7 @@ if __name__ == "__main__":
     #                               y_train_=y_train)
 
     example_model_2 = keras.models.load_model('models/example_2_model_1')
-
+    
     # test_data =
     print(df[["a", "b"]].loc[test.index.tolist()].values.tolist())
     y_pred = [list(x) for x in example_model_2.predict(x_test)]
