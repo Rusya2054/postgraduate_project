@@ -30,6 +30,7 @@ dependencies = [
     "packaging==26.0",
     "pandas==3.0.0",
     "pillow==12.1.0",
+    "plotly>=6.5.2",
     "protobuf==6.33.5",
     "pygments==2.19.2",
     "python-dateutil==2.9.0.post0",

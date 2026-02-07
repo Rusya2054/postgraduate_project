@@ -4,6 +4,8 @@
 /copies/*.txt
 Черновик.py
 models/*
+!models/.gitkeep
+!models/*.keras
 .idea
 *.xlsx
 .venv

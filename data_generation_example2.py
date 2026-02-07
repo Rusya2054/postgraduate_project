@@ -18,7 +18,7 @@ if __name__ == "__main__":
     # по X для а и для B диапазон: [0; 1]
     possible_area = list([round(i, 2) for i in np.linspace(0, 1, 100)])
 
-    # берем 3 случаных числа
+    # берем 4 случайных числа (x1, x2, a, b)
     data = [random.sample(possible_area, 4) for x in range(0, N)]
     print(data)
     # сортируем первые два элемента по возрастанию
